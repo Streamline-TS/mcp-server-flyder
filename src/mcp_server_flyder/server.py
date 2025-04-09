@@ -47,7 +47,7 @@ async def list_workflows() -> list[dict[str, Any]]:
     The IDs can later be used to run a specific workflow.
 
     Returns:
-        dict[str, Any]: A dictionary containing workflow names and their IDs.
+        list[dict[str, Any]]: A list of dictionaries containing workflow names and their IDs.
     """
     url = f"{FLYDER_API_BASE}/workflow/list"
     logging.info(f"Fetching workflows from {url}")
@@ -77,6 +77,7 @@ async def run_workflow_by_id(workflow_id: int, input: str = None) -> dict[str, A
 
     Args:
         workflow_id (int): The ID of the workflow to run.
+        input (str, optional): The input text to be passed to the workflow. If not provided, the default input from the workflow will be used.
 
     Returns:
         dict[str, Any]: A dictionary containing the result of the workflow run.

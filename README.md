@@ -26,7 +26,7 @@ Please note that mcp-server-flyder is currently in early development. The functi
 
 ## Installation
 
-### Using uv (recommended)
+### Using uvx (recommended)
 
 Using [`uv`](https://docs.astral.sh/uv/) no specific installation is needed. We will use [`uvx`](https://docs.astral.sh/uv/guides/tools/) to directly run *mcp-server-flyder*.
 
@@ -36,19 +36,13 @@ Using [`uv`](https://docs.astral.sh/uv/) no specific installation is needed. We 
 
 Add this to your `claude_desktop_config.json`:
 
-<details>
-<summary>Using uv</summary>
-
 ```json
 {
   "mcpServers": {
     "flyder": {
-      "command": "uv",
+      "command": "uvx",
       "args": [ 
-        "--directory",
-        "/<path to repo>/src/mcp_server_flyder",
-        "run",
-        "server.py"
+        "mcp_server_flyder"
       ],
       "env": {
         "FLYDER_EMAIL": "<email used to sign up on Flyder>",
@@ -58,15 +52,14 @@ Add this to your `claude_desktop_config.json`:
   }
 }
 ```
-</details>
 
 ## Debugging
 
 You can use the MCP inspector to debug the server. 
 
 ```
-cd path/to/repo/src/mcp_server_flyder
-npx @modelcontextprotocol/inspector uv run server.py
+cd path/to/repo
+npx @modelcontextprotocol/inspector uv run mcp-server-flyder
 ```
 
 Running `tail -n 20 -f ~/Library/Logs/Claude/mcp*.log` will show the logs from the server and may
@@ -87,9 +80,9 @@ If you are doing local development, there are two ways to test your changes:
       "command": "uv",
       "args": [ 
         "--directory",
-        "/<path to repo>/src/mcp_server_flyder",
+        "/<path to repo>",
         "run",
-        "server.py"
+        "mcp-server-flyder"
       ],
       "env": {
         "FLYDER_EMAIL": "<email used to sign up on Flyder>",

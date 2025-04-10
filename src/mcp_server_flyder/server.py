@@ -20,13 +20,16 @@ async def api_request(url: str, method: str = "GET", data: dict[str, Any] | None
         "Authorization": f"Bearer {os.getenv('FLYDER_API_KEY', '')}"
     }
     logging.info(f"Making {method} request to {url} with headers: {headers}")
-    async with httpx.AsyncClient(verify=False) as client:
+    async with httpx.AsyncClient() as client:
         try:
             if method.upper() == "GET":
+                logging.info(f"GET request to {url}")
                 response = await client.get(url, headers=headers, timeout=30.0)
                 logging.info(f"Response: {response}")
             elif method.upper() == "POST":
+                logging.info(f"POST request to {url}")
                 response = await client.post(url, headers=headers, json=data, timeout=30.0)
+                logging.info(f"Response: {response}")
             else:
                 raise ValueError(f"Unsupported HTTP method: {method}")
             

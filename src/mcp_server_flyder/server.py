@@ -19,17 +19,12 @@ async def api_request(url: str, method: str = "GET", data: dict[str, Any] | None
         "User-Email": os.getenv("FLYDER_EMAIL", ""),
         "Authorization": f"Bearer {os.getenv('FLYDER_API_KEY', '')}"
     }
-    logging.info(f"Making {method} request to {url} with headers: {headers}")
     async with httpx.AsyncClient() as client:
         try:
             if method.upper() == "GET":
-                logging.info(f"GET request to {url}")
                 response = await client.get(url, headers=headers, timeout=30.0)
-                logging.info(f"Response: {response}")
             elif method.upper() == "POST":
-                logging.info(f"POST request to {url}")
                 response = await client.post(url, headers=headers, json=data, timeout=30.0)
-                logging.info(f"Response: {response}")
             else:
                 raise ValueError(f"Unsupported HTTP method: {method}")
             
@@ -53,7 +48,6 @@ async def list_workflows() -> list[dict[str, Any]]:
         list[dict[str, Any]]: A list of dictionaries containing workflow names and their IDs.
     """
     url = f"{FLYDER_API_BASE}/workflow/list"
-    logging.info(f"Fetching workflows from {url}")
     data = await api_request(url)
 
     if not data or not isinstance(data, list):
@@ -91,15 +85,13 @@ async def run_workflow_by_id(workflow_id: int, input: str = None) -> dict[str, A
         logging.error("Unable to fetch workflow details or invalid response format.")
         return {}
     
-    logging.info(f"Workflow details: {data}")
-    
     url = f"{FLYDER_API_BASE}/workflow/run/{workflow_id}"
-    logging.info(f"Running workflow with ID {workflow_id} at {url}")
     
     if not input:
         input = data.get("input_text", "")
     
     payload = {"input": input}
+    payload["uuid"] = os.urandom(16).hex()
     data = await api_request(url, method="POST", data=payload)
 
     if not data or not isinstance(data, dict):
